@@ -7,6 +7,12 @@
   <version>1.0</version>
   <name>ProjectManagerEE Maven Webapp</name>
   <url>http://maven.apache.org</url>
+
+  <properties>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -14,20 +20,34 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.1.0-M2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.32</version>
+    </dependency>
+    <dependency>
+      <groupId>org.modelmapper</groupId>
+      <artifactId>modelmapper</artifactId>
+      <version>3.2.0</version>
+    </dependency>
+
   </dependencies>
   <build>
     <finalName>ProjectManagerEE</finalName>
     <plugins>
-
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
-<!--        <version>3.2.2</version>-->
         <configuration>
           <warName>ROOT</warName>
           <outputDirectory>C:/Tomcat/tomcat/webapps</outputDirectory>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 </project>
