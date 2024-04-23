@@ -3,7 +3,6 @@ package service;
 import entity.Project;
 import repository.ProjectRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectService {
@@ -12,8 +11,12 @@ public class ProjectService {
         return ProjectRepository.getAllProjects();
     }
 
-    public static Project getOneProject() {
-        return ProjectRepository.getOneProject();
+    public static Project getProject(Long id) {
+        return ProjectRepository.getProjectById(id);
+    }
+
+    public static List<Project> getSubprojectsForProjectWithId(Long id) {
+        return ProjectRepository.getAllProjects();
     }
 
 }

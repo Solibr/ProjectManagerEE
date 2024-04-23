@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,16 +26,13 @@
         <div class="projects__list column">
 
             <%@ page import="dto.ProjectDto, java.util.List" %>
+
             <%
                 List<ProjectDto> projectsList = (List<ProjectDto>) request.getAttribute("projects-list");
                 for (ProjectDto project : projectsList) {
-                    out.println("<a href=\"/projects/" + project.getId() + "\">" + project.getName() + "</a>");
-                }
             %>
-
-            <div class="project" th:each="project : ${projects}">
-                <a th:href="'/projects/' + ${project.id}" th:text="${project.name}"></a>
-            </div>
+            <a href="<%= "/projects/" + project.getId() %>"> <%= project.getName() %> </a>
+            <% } %>
 
         </div>
     </div>
