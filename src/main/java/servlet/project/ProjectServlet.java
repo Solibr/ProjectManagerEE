@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @WebServlet("/projects/*")
 public class ProjectServlet extends HttpServlet {
@@ -27,8 +28,6 @@ public class ProjectServlet extends HttpServlet {
         try {
             String strNumber = Arrays.stream(req.getPathInfo().split("/")).filter(s -> !s.isBlank()).findFirst().get();
             long projectId = Integer.parseInt(strNumber);
-            pw.println(projectId);
-
 
             Project project = ProjectService.getProject(projectId);
             List<Project> subprojects = ProjectService.getSubprojectsForProjectWithId(projectId);
@@ -53,6 +52,25 @@ public class ProjectServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter pw = resp.getWriter();
         pw.println("delete action, POST");
+
+        try {
+            List<String> pathElementsList = Arrays.stream(req.getPathInfo().split("/")).filter(s -> !s.isBlank()).toList();
+            String strNumber = pathElementsList.get(0);
+            long projectId = Integer.parseInt(strNumber);
+
+            Long parentProjectId = ProjectService.getProject(projectId).getParentId();
+
+            // TODO deletion
+
+            if (parentProjectId != null) {
+                resp.sendRedirect("/projects/" + parentProjectId);
+            } else {
+                resp.sendRedirect("/projects");
+            }
+
+        } catch (NumberFormatException | NoSuchElementException e) {
+            resp.setStatus(404);
+        }
     }
 
 }

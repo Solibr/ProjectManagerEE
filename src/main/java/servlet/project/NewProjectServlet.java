@@ -16,5 +16,8 @@ public class NewProjectServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter pw = resp.getWriter();
         pw.println("/project/new GET");
+        pw.println(req.getParameter("parent"));
+        req.setAttribute("parent", req.getParameter("parent"));
+        this.getServletContext().getRequestDispatcher("/project-new.jsp");
     }
 }
