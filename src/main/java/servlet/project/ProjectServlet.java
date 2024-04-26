@@ -2,6 +2,8 @@ package servlet.project;
 
 import dto.ProjectDto;
 import entity.Project;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,6 +22,9 @@ import java.util.NoSuchElementException;
 @WebServlet("/projects/*")
 public class ProjectServlet extends HttpServlet {
 
+    @Inject
+    private ProjectService projectService;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter pw = resp.getWriter();
@@ -32,8 +37,8 @@ public class ProjectServlet extends HttpServlet {
                 String strNumber = pathParts.get(0);
                 projectId = Long.parseLong(strNumber);
 
-                Project project = ProjectService.getProject(projectId);
-                List<Project> subprojects = ProjectService.getSubprojectsForProjectWithId(projectId);
+                Project project = projectService.getProject(projectId);
+                List<Project> subprojects = projectService.getSubprojectsForProjectWithId(projectId);
 
                 ProjectDto projectDto = ProjectMapper.entityToDto(project);
                 List<ProjectDto> subprojectsDto = subprojects.stream().map(ProjectMapper::entityToDto).toList();
@@ -52,7 +57,7 @@ public class ProjectServlet extends HttpServlet {
 
             try {
                 Long id = Long.parseLong(pathParts.get(0));
-                String oldName = ProjectService.getProject(id).getName();
+                String oldName = projectService.getProject(id).getName();
 
                 req.setAttribute("oldName", oldName);
                 req.setAttribute("id", id);
@@ -78,7 +83,7 @@ public class ProjectServlet extends HttpServlet {
                     String strNumber = pathParts.get(0);
                     long projectId = Integer.parseInt(strNumber);
 
-                    Long parentProjectId = ProjectService.getProject(projectId).getParentId();
+                    Long parentProjectId = projectService.getProject(projectId).getParentId();
 
                     // TODO deletion
                     pw.println("delete project with id: " + projectId);

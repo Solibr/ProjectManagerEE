@@ -1,13 +1,16 @@
 package repository;
 
 import entity.Project;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScoped
 public class ProjectRepository {
 
-    public static List<Project> getAllProjects() {
+    public List<Project> getAllProjects() {
         List<Project> list = new ArrayList<Project>();
         Project p1 = new Project();
         Project p2 = new Project();
@@ -24,7 +27,7 @@ public class ProjectRepository {
         return list;
     }
 
-    public static Project getProjectById(Long id) {
+    public Project getProjectById(Long id) {
         if (id == 2) {
             Project pp = new Project();
             pp.setName("Another oo");

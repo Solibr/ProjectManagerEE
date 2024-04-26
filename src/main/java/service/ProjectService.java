@@ -1,25 +1,32 @@
 package service;
 
 import entity.Project;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import repository.ProjectRepository;
 
 import java.util.List;
 
+@ApplicationScoped
 public class ProjectService {
 
-    public static List<Project> getProjectsList() {
-        return ProjectRepository.getAllProjects();
+    @Inject
+    private ProjectRepository projectRepository;
+
+    public List<Project> getProjectsList() {
+        return projectRepository.getAllProjects();
     }
 
-    public static Project getProject(Long id) {
-        return ProjectRepository.getProjectById(id);
+    public Project getProject(Long id) {
+        return projectRepository.getProjectById(id);
     }
 
-    public static List<Project> getSubprojectsForProjectWithId(Long id) {
-        return ProjectRepository.getAllProjects();
+    public List<Project> getSubprojectsForProjectWithId(Long id) {
+        return projectRepository.getAllProjects();
     }
 
-    public static Project saveNewProject(Project project) {
+    public Project saveNewProject(Project project) {
         project.setId(3L);
         System.out.println(project.toString());
         return project;

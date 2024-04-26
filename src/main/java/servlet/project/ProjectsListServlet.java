@@ -2,6 +2,8 @@ package servlet.project;
 
 import dto.ProjectDto;
 import entity.Project;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,10 +20,13 @@ import java.util.List;
 @WebServlet("/projects")
 public class ProjectsListServlet extends HttpServlet {
 
+    @Inject
+    private ProjectService projectService;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/projects-list.jsp");
-        List<ProjectDto> projectsList = ProjectService.getProjectsList().stream()
+        List<ProjectDto> projectsList = projectService.getProjectsList().stream()
                 .map(ProjectMapper::entityToDto)
                 .toList();
         req.setAttribute("projects-list", projectsList);
@@ -41,7 +46,7 @@ public class ProjectsListServlet extends HttpServlet {
         projectDto.setName(name);
 
         Project project = ProjectMapper.dtoToEntity(projectDto);
-        Project savedProject = ProjectService.saveNewProject(project);
+        Project savedProject = projectService.saveNewProject(project);
 
         Long id = savedProject.getId();
 
