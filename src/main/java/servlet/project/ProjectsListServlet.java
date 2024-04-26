@@ -22,11 +22,14 @@ public class ProjectsListServlet extends HttpServlet {
     @Inject
     private ProjectService projectService;
 
+    @Inject
+    private ProjectMapper projectMapper;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/projects-list.jsp");
         List<ProjectDto> projectsList = projectService.getRootProjectsList().stream()
-                .map(ProjectMapper::entityToDto)
+                .map(projectMapper::entityToDto)
                 .toList();
         req.setAttribute("projects-list", projectsList);
         requestDispatcher.forward(req, resp);
@@ -49,7 +52,7 @@ public class ProjectsListServlet extends HttpServlet {
         projectDto.setParentId(parentId);
         projectDto.setName(name);
 
-        Project project = ProjectMapper.dtoToEntity(projectDto);
+        Project project = projectMapper.dtoToEntity(projectDto);
         projectService.saveNewProject(project);
 
         if (parentId == null) {

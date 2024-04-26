@@ -24,11 +24,16 @@ public class ProjectServlet extends HttpServlet {
     @Inject
     private ProjectService projectService;
 
+    @Inject
+    private ProjectMapper projectMapper;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter pw = resp.getWriter();
 
         List<String> pathParts = Arrays.stream(req.getPathInfo().split("/")).filter(s -> !s.isBlank()).toList();
+
+        // GET
         if (pathParts.size() == 1) {
             Long projectId;
             try {
@@ -38,8 +43,8 @@ public class ProjectServlet extends HttpServlet {
                 Project project = projectService.getProject(projectId);
                 List<Project> subprojects = projectService.getSubprojectsForProjectWithId(projectId);
 
-                ProjectDto projectDto = ProjectMapper.entityToDto(project);
-                List<ProjectDto> subprojectsDto = subprojects.stream().map(ProjectMapper::entityToDto).toList();
+                ProjectDto projectDto = projectMapper.entityToDto(project);
+                List<ProjectDto> subprojectsDto = subprojects.stream().map(projectMapper::entityToDto).toList();
 
                 req.setAttribute("project", projectDto);
                 req.setAttribute("subprojects", subprojectsDto);
@@ -51,7 +56,10 @@ public class ProjectServlet extends HttpServlet {
                 resp.setStatus(404);
             }
 
-        } else if (pathParts.size() > 1 && pathParts.get(1).equals("update")) {
+        }
+
+        // GET update-page
+        else if (pathParts.size() > 1 && pathParts.get(1).equals("update")) {
 
             try {
                 Long id = Long.parseLong(pathParts.get(0));
@@ -84,7 +92,7 @@ public class ProjectServlet extends HttpServlet {
 
                     projectService.deleteById(projectId);
 
-                    if (parentProjectId != null) {
+                    if (parentProjectId != 0) {
                         resp.sendRedirect("/projects/" + parentProjectId);
                     } else {
                         resp.sendRedirect("/projects");
@@ -106,7 +114,7 @@ public class ProjectServlet extends HttpServlet {
                 projectDto.setName(req.getParameter("name"));
                 projectDto.setId(projectId);
 
-                Project project = ProjectMapper.dtoToEntity(projectDto);
+                Project project = projectMapper.dtoToEntity(projectDto);
                 projectService.updateProject(project);
 
                 resp.sendRedirect("/projects/" + projectId);
