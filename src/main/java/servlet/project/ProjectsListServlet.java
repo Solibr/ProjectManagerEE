@@ -2,7 +2,6 @@ package servlet.project;
 
 import dto.ProjectDto;
 import entity.Project;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -26,7 +25,7 @@ public class ProjectsListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/projects-list.jsp");
-        List<ProjectDto> projectsList = projectService.getProjectsList().stream()
+        List<ProjectDto> projectsList = projectService.getRootProjectsList().stream()
                 .map(ProjectMapper::entityToDto)
                 .toList();
         req.setAttribute("projects-list", projectsList);
@@ -39,17 +38,26 @@ public class ProjectsListServlet extends HttpServlet {
         pw.println();
 
         String name = req.getParameter("name");
-        Long parentId = Long.parseLong(req.getParameter("parentId"));
+        Long parentId;
+        try {
+             parentId = Long.parseLong(req.getParameter("parentId"));
+        } catch (Exception e) {
+            parentId = null;
+        }
 
         ProjectDto projectDto = new ProjectDto();
         projectDto.setParentId(parentId);
         projectDto.setName(name);
 
         Project project = ProjectMapper.dtoToEntity(projectDto);
-        Project savedProject = projectService.saveNewProject(project);
+        projectService.saveNewProject(project);
 
-        Long id = savedProject.getId();
+        if (parentId == null) {
+            resp.sendRedirect("/projects");
+        } else {
+            resp.sendRedirect("/projects/" + parentId);
+        }
 
-        resp.sendRedirect("/projects/" + id);
+
     }
 }

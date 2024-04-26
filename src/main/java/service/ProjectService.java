@@ -2,7 +2,6 @@ package service;
 
 import entity.Project;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import repository.ProjectRepository;
 
@@ -14,21 +13,28 @@ public class ProjectService {
     @Inject
     private ProjectRepository projectRepository;
 
-    public List<Project> getProjectsList() {
-        return projectRepository.getAllProjects();
+    public List<Project> getRootProjectsList() {
+        return projectRepository.findByParentIdEqualsNull();
     }
 
     public Project getProject(Long id) {
-        return projectRepository.getProjectById(id);
+        return projectRepository.findById(id).get();
     }
 
     public List<Project> getSubprojectsForProjectWithId(Long id) {
-        return projectRepository.getAllProjects();
+        return projectRepository.findByParentId(id);
     }
 
-    public Project saveNewProject(Project project) {
-        project.setId(3L);
-        System.out.println(project.toString());
-        return project;
+    public void saveNewProject(Project project) {
+        project.setId(null);
+        projectRepository.save(project);
+    }
+
+    public void updateProject(Project project) {
+        projectRepository.update(project);
+    }
+
+    public void deleteById(long projectId) {
+        projectRepository.deleteById(projectId);
     }
 }

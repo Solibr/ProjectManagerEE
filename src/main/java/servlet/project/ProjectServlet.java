@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @WebServlet("/projects/*")
 public class ProjectServlet extends HttpServlet {
@@ -29,7 +28,6 @@ public class ProjectServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter pw = resp.getWriter();
 
-        // TODO get and update-page separation
         List<String> pathParts = Arrays.stream(req.getPathInfo().split("/")).filter(s -> !s.isBlank()).toList();
         if (pathParts.size() == 1) {
             Long projectId;
@@ -73,10 +71,9 @@ public class ProjectServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter pw = resp.getWriter();
 
-
-        // TODO delete and update separation
         List<String> pathParts = Arrays.stream(req.getPathInfo().split("/")).filter(s -> !s.isBlank()).toList();
 
+        // DELETE
         if (pathParts.size() == 2) {
             if (pathParts.get(1).equals("delete")) {
                 try {
@@ -85,26 +82,34 @@ public class ProjectServlet extends HttpServlet {
 
                     Long parentProjectId = projectService.getProject(projectId).getParentId();
 
-                    // TODO deletion
-                    pw.println("delete project with id: " + projectId);
+                    projectService.deleteById(projectId);
 
-/*                    if (parentProjectId != null) {
+                    if (parentProjectId != null) {
                         resp.sendRedirect("/projects/" + parentProjectId);
                     } else {
                         resp.sendRedirect("/projects");
-                    }*/
+                    }
 
                 } catch (NumberFormatException e) {
                     resp.setStatus(404);
                 }
             }
-        } else if (pathParts.size() == 1) {
+        }
+
+        // UPDATE
+        else if (pathParts.size() == 1) {
             try {
                 String strNumber = pathParts.get(0);
                 long projectId = Integer.parseInt(strNumber);
-                pw.println("update project with id: " + projectId);
 
-                // TODO update
+                ProjectDto projectDto = new ProjectDto();
+                projectDto.setName(req.getParameter("name"));
+                projectDto.setId(projectId);
+
+                Project project = ProjectMapper.dtoToEntity(projectDto);
+                projectService.updateProject(project);
+
+                resp.sendRedirect("/projects/" + projectId);
 
             } catch (NumberFormatException e) {
                 resp.setStatus(404);

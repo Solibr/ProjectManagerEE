@@ -28,7 +28,7 @@
             <h1><%= project.getName() %></h1>
         </div>
 
-        <% if (project.getParentId() != null) { %>
+        <% if (project.getParentId() != 0) { %>
         <div class="project-actions__to-parent">
             <a class="button" href="<%= "/projects/" + project.getParentId() %>">To parent project</a>
         </div>
