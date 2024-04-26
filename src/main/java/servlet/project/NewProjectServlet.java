@@ -1,5 +1,6 @@
 package servlet.project;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,10 +15,8 @@ public class NewProjectServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter pw = resp.getWriter();
-        pw.println("/project/new GET");
-        pw.println(req.getParameter("parent"));
-        req.setAttribute("parent", req.getParameter("parent"));
-        this.getServletContext().getRequestDispatcher("/project-new.jsp");
+        req.setAttribute("parentId", req.getParameter("parentId"));
+        RequestDispatcher requestDispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/project-new.jsp");
+        requestDispatcher.forward(req, resp);
     }
 }

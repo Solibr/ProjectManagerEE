@@ -34,6 +34,10 @@
         </div>
         <% } %>
 
+        <div class="project-actions__rename">
+            <a class="button" href="<%= "/projects/" + project.getId() + "/update" %>">Rename</a>
+        </div>
+
         <div class="project-actions__delete">
             <form action="<%= "/projects/" + project.getId() + "/delete" %>" method="post">
                 <input type="submit" value="Delete">
@@ -48,7 +52,7 @@
                     <h2>Subprojects</h2>
                 </div>
                 <div class="subprojects__new-button">
-                    <a href="<%= "/projects/new?parent=" + project.getId() %>" class="button">Add subproject</a>
+                    <a href="<%= "/projects/new?parentId=" + project.getId() %>" class="button">Add subproject</a>
                 </div>
             </div>
 

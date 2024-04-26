@@ -19,4 +19,9 @@ public class ProjectService {
         return ProjectRepository.getAllProjects();
     }
 
+    public static Project saveNewProject(Project project) {
+        project.setId(3L);
+        System.out.println(project.toString());
+        return project;
+    }
 }

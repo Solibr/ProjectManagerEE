@@ -20,7 +20,7 @@
         <form action="/projects" method="post">
             <label for="name">Project name</label>
             <input type="text" name="name" id="name">
-            <input type="hidden" name="parentId" value="<%= request.getAttribute("parent") %>">
+            <input type="hidden" name="parentId" value="<%= request.getAttribute("parentId") %>">
             <input type="submit" value="Submit">
         </form>
     </div>
