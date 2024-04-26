@@ -4,4 +4,14 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+
+  <resource-env-ref>
+    <resource-env-ref-name>BeanManager</resource-env-ref-name>
+    <resource-env-ref-type>
+      jakarta.enterprise.inject.spi.BeanManager
+    </resource-env-ref-type>
+  </resource-env-ref>
+
+
 </web-app>
+
