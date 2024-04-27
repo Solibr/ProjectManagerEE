@@ -143,7 +143,7 @@ public class ProjectRepository {
 
 
     private Project createProjectFromResultSetRow(ResultSet resultSet) throws SQLException {
-        Project project = new Project();
+        Project project = new Project(); // вот это можно и в маппер
         project.setId(resultSet.getLong(1));
         project.setName(resultSet.getString(2));
         project.setParentId(resultSet.getLong(3));
