@@ -8,15 +8,13 @@ import org.modelmapper.ModelMapper;
 @ApplicationScoped
 public class ProjectMapper {
 
-    private static ModelMapper modelMapper = new ModelMapper();
+    private static final ModelMapper modelMapper = new ModelMapper();
 
     public ProjectDto entityToDto(Project project) {
-        ProjectDto dto = modelMapper.map(project, ProjectDto.class);
-        return dto;
+        return modelMapper.map(project, ProjectDto.class); // лучше напрямую модельмаппер использовать
     }
 
     public Project dtoToEntity(ProjectDto projectDto) {
-        Project entity = modelMapper.map(projectDto, Project.class);
-        return entity;
+        return modelMapper.map(projectDto, Project.class);
     }
 }
